@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Тикеты — главная">
+        <span class="brand-mark">t<span>.</span></span>
+        <span class="brand-copy"><b>Tex.Отдел</b><small>WORKSPACE</small></span>
+      </a>
+      <div class="workspace-label">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+      <nav class="side-nav">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span> Обзор</a>
+        <a class="nav-link" href="#tickets"><span class="nav-icon">▤</span> Все заявки <span class="nav-count" id="nav-total">—</span></a>
+        <a class="nav-link" href="#reports"><span class="nav-icon">▥</span> Аналитика</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="system-card">
+          <span class="pulse"></span>
+          <div><b>Система активна</b><small>Подключение к API</small></div>
+        </div>
+        <div class="profile">
+          <div class="avatar">ТП</div>
+          <div><b>Техподдержка</b><small>Рабочая панель</small></div>
+          <span class="profile-more">···</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Рабочее пространство</span><i>/</i><b id="crumb-current">Обзор</b></div>
+        <div class="top-actions">
+          <span class="today-label" id="today-label"></span>
+          <button class="icon-button" id="refresh-btn" title="Обновить данные" aria-label="Обновить">↻</button>
+          <button class="button button-primary" id="create-btn"><span>＋</span> Новая заявка</button>
+        </div>
+      </header>
+
+      <section class="page-section" id="overview">
+        <div class="page-heading">
+          <div><div class="eyebrow">ПАНЕЛЬ УПРАВЛЕНИЯ</div><h1>Добрый день <span class="wave">✳</span></h1><p>Вот что происходит с заявками в вашей службе поддержки.</p></div>
+          <div class="heading-date"><span class="date-dot"></span><span id="date-range-label">Статистика за текущий месяц</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card stat-main">
+            <div class="stat-top"><span>Всего заявок</span><span class="stat-icon">▤</span></div>
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-foot"><span class="stat-note">Создано за период</span><span class="stat-symbol">↗</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>В работе</span><span class="stat-icon icon-blue">◷</span></div>
+            <div class="stat-value" id="stat-progress">—</div>
+            <div class="stat-foot"><span class="mini-dot blue"></span><span class="stat-note">Требуют внимания</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Просрочено</span><span class="stat-icon icon-red">!</span></div>
+            <div class="stat-value" id="stat-overdue">—</div>
+            <div class="stat-foot"><span class="mini-dot red"></span><span class="stat-note">Открытые заявки</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>Среднее решение</span><span class="stat-icon icon-green">⌁</span></div>
+            <div class="stat-value" id="stat-average">—<small> мин</small></div>
+            <div class="stat-foot"><span class="mini-dot green"></span><span class="stat-note">Для решённых заявок</span></div>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel status-panel" id="reports">
+            <div class="panel-heading"><div><h2>Статус заявок</h2><p>Распределение за выбранный период</p></div><span class="panel-kicker">АНАЛИТИКА</span></div>
+            <div class="status-chart-wrap">
+              <div class="donut" id="status-donut"><div class="donut-center"><b id="donut-total">—</b><small>заявок</small></div></div>
+              <div class="legend" id="status-legend">
+                <div class="legend-empty">Загрузка данных…</div>
+              </div>
+            </div>
+          </section>
+          <section class="panel priority-panel">
+            <div class="panel-heading"><div><h2>Приоритеты</h2><p>Распределение обращений</p></div><span class="panel-kicker">НАГРУЗКА</span></div>
+            <div class="priority-list" id="priority-list"><div class="legend-empty">Загрузка данных…</div></div>
+            <div class="priority-foot"><span>Всего за период</span><b id="priority-total">—</b></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page-section tickets-section" id="tickets">
+        <div class="section-heading">
+          <div><div class="eyebrow">ОБРАЩЕНИЯ</div><h2>Последние заявки</h2><p>Управляйте обращениями и отслеживайте их состояние.</p></div>
+          <button class="button button-outline" id="all-tickets-btn">Показать все <span>→</span></button>
+        </div>
+        <div class="panel table-panel">
+          <div class="toolbar">
+            <div class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Поиск по названию или ID…"></div>
+            <div class="filters">
+              <select id="status-filter" aria-label="Фильтр по статусу"><option value="">Все статусы</option><option value="NEW">Новая</option><option value="IN_PROGRESS">В работе</option><option value="RESOLVED">Решена</option><option value="CANCELLED">Отменена</option></select>
+              <select id="priority-filter" aria-label="Фильтр по приоритету"><option value="">Все приоритеты</option><option value="HIGH">Высокий</option><option value="MEDIUM">Средний</option><option value="LOW">Низкий</option></select>
+              <select id="category-filter" aria-label="Фильтр по категории"><option value="">Все категории</option></select>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>ЗАЯВКА</th><th>КАТЕГОРИЯ</th><th>ПРИОРИТЕТ</th><th>СТАТУС</th><th>СРОК</th><th></th></tr></thead>
+              <tbody id="tickets-body"><tr><td colspan="6" class="loading-cell">Загружаем заявки…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="table-count">Загрузка…</span><div class="pagination"><button id="prev-page" disabled aria-label="Предыдущая страница">←</button><span id="page-label">1</span><button id="next-page" disabled aria-label="Следующая страница">→</button></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="modal" id="create-modal">
+    <form id="create-form" class="modal-card">
+      <div class="modal-head"><div><div class="eyebrow">НОВОЕ ОБРАЩЕНИЕ</div><h2>Создать заявку</h2><p>Заполните основные данные обращения.</p></div><button type="button" class="close-button" data-close="create-modal">×</button></div>
+      <label>Название заявки <span>*</span><input name="title" required maxlength="180" placeholder="Например, не работает принтер"></label>
+      <label>Описание<textarea name="description" rows="3" placeholder="Опишите проблему подробнее…"></textarea></label>
+      <div class="form-row">
+        <label>Категория <span>*</span><select name="categoryId" id="create-category" required></select></label>
+        <label>Приоритет <span>*</span><select name="priority" required><option value="MEDIUM">Средний</option><option value="HIGH">Высокий</option><option value="LOW">Низкий</option></select></label>
+      </div>
+      <label>Срок выполнения <span>*</span><input type="datetime-local" name="dueAt" id="create-due" required></label>
+      <div class="form-error" id="create-error"></div>
+      <div class="modal-actions"><button type="button" class="button button-outline" data-close="create-modal">Отмена</button><button class="button button-primary" type="submit">Создать заявку <span>→</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog class="modal detail-modal" id="detail-modal">
+    <div class="modal-card detail-card">
+      <div class="modal-head"><div><div class="eyebrow" id="detail-id">ЗАЯВКА</div><h2 id="detail-title">Загрузка…</h2><p id="detail-subtitle"></p></div><button type="button" class="close-button" data-close="detail-modal">×</button></div>
+      <div id="detail-content"></div>
+    </div>
+  </dialog>
+  <div class="toast" id="toast" role="status"></div>
+</body>
+</html>
