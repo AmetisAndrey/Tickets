@@ -4,6 +4,7 @@ spring:
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
   jpa:
+<<<<<<< HEAD
     hibernate:
       ddl-auto: validate
     open-in-view: false
@@ -11,6 +12,12 @@ spring:
       hibernate:
         jdbc.time_zone: UTC
   flyway:
+=======
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    flyway:
+>>>>>>> 5857b2bcbe0958a9015b8b31dbbb0b3756c7d81c
     enabled: true
     locations: classpath:db/migration
 
@@ -21,6 +28,7 @@ management:
         include: health,info
   endpoint:
     health:
+<<<<<<< HEAD
       probes:
         enabled: true
       show-details: always
@@ -32,3 +40,6 @@ springdoc:
 logging:
   pattern:
     console: "%d{ISO8601} %-5level [%thread] %logger{36} - %msg%n"
+=======
+      show-details: always
+>>>>>>> 5857b2bcbe0958a9015b8b31dbbb0b3756c7d81c
