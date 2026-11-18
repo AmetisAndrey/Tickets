@@ -17,35 +17,48 @@ jobs:
     name: Build, Test and Deploy
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: tickets
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d tickets"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_URL: jdbc:postgresql://localhost:5432/tickets
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
     steps:
-      # 1. Получение исходного кода
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Установка Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      # 3. Настройка Gradle
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # 4. Подготовка Gradle Wrapper
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      # 5. Сборка и тестирование
       - name: Build and test
         run: ./gradlew clean test bootJar --no-daemon
 
-      # 6. Настройка Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 7. Авторизация в Docker Hub
       - name: Login to Docker Hub
         if: github.event_name == 'push'
         uses: docker/login-action@v3
@@ -53,7 +66,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 8. Сборка и публикация Docker-образа
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
