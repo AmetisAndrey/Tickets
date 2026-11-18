@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 CREATE TABLE categories (
                             id BIGSERIAL PRIMARY KEY,
                             name VARCHAR(100) NOT NULL UNIQUE
@@ -15,6 +15,7 @@ CREATE TABLE tickets (
                          due_at TIMESTAMPTZ NOT NULL,
                          closed_at TIMESTAMPTZ
 );
+
 CREATE INDEX idx_tickets_status ON tickets(status);
 CREATE INDEX idx_tickets_created_at ON tickets(created_at);
 CREATE INDEX idx_tickets_category ON tickets(category_id);
@@ -26,32 +27,8 @@ CREATE TABLE ticket_status_history (
                                        to_status VARCHAR(16) NOT NULL,
                                        changed_at TIMESTAMPTZ NOT NULL
 );
+
 CREATE INDEX idx_history_ticket ON ticket_status_history(ticket_id);
 
-INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Network'), ('Access');
-=======
-CREATE TABLE categories(
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
-);
-CREATE TABLE tickets(
-    id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    category_id BIGINT NOT NULL REFERENCES categories(id),
-    priority VARCHAR(20) NOT NULL,
-    status VARCHAR(30) NOT NULL DEFAULT 'NEW',
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    due_at TIMESTAMP,
-    closed_at TIMESTAMP
-);
-CREATE TABLE ticket_history (
-    id BIGSERIAL PRIMARY KEY,
-    ticket_id BIGINT NOT NULL REFERENCES tickets(id),
-    old_status VARCHAR(30),
-    new_status VARCHAR(30) NOT NULL,
-    changed_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
-INSERT INTO categories (name) VALUES ('Hardware'), ('Software'), ('Network');
->>>>>>> 5857b2bcbe0958a9015b8b31dbbb0b3756c7d81c
+INSERT INTO categories (name)
+VALUES ('Hardware'), ('Software'), ('Network'), ('Access');
